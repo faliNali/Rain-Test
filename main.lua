@@ -33,3 +33,7 @@ end
 function love.draw()
     canvas:draw()
 end
+
+function love.resize()
+    love.load()
+end
