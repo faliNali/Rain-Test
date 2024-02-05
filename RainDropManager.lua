@@ -1,5 +1,6 @@
 local Timer = require 'lib.Timer'
 local RainDrop = require 'RainDrop'
+local drawFunctions = require 'drawFunctions'
 
 local RainDropManager = {}
 RainDropManager.__index = RainDropManager
@@ -43,17 +44,6 @@ function RainDropManager:update(dt)
     end
 end
 
-local function drawOval(x, y, width, height)
-    local segments = {}
-    local numOfSegments = 8
-    for i=0, numOfSegments do
-        local radian = i/numOfSegments * math.pi*2
-        table.insert(segments, x + math.cos(radian) * width)
-        table.insert(segments, y + math.sin(radian) * height)
-    end
-    love.graphics.line(segments)
-end
-
 function RainDropManager:draw()
     for _, rainDrop in ipairs(self.rainDrops) do
         local groundYLerpPosition = (rainDrop.yPopPosition-self.groundY)/(self.canvas:getHeight()-self.groundY)
@@ -65,7 +55,7 @@ function RainDropManager:draw()
             local duration = rainDrop.durationPopped
             love.graphics.setColor(1, 1, 1, alpha * (self.durationPoppedSpan-duration))
             local ovalSizeFactor = duration^0.5 * sizeFactor * 3
-            drawOval(x, y, ovalSizeFactor*2, ovalSizeFactor)
+            drawFunctions.drawOval(x, y, ovalSizeFactor*2, ovalSizeFactor)
         else
             love.graphics.setColor(1, 1, 1, alpha)
             local rainDropSizeFactor = self.rainDropSize * sizeFactor

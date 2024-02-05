@@ -1,8 +1,10 @@
 local Canvas = require 'lib.Canvas'
 local RainDropManager = require 'RainDropManager'
+local Background = require 'Background'
 
 local canvas
 local rainDropManager
+local background
 local groundY = 0
 
 function love.load()
@@ -11,26 +13,19 @@ function love.load()
 
     canvas = Canvas.new(4)
 
-    local groundY = canvas:getHeight()*0.4
+    groundY = canvas:getHeight()*0.4
     rainDropManager = RainDropManager.new(canvas, groundY)
+    background = Background.new(canvas, groundY)
 end
 
 local function canvasDraw()
-    rainDropManager:draw()
-    --[[ for i=0, 10 do
-        local color = 0.1 + 0.05*i
-        love.graphics.setColor(color, color, color)
-        local y = canvas:getHeight()*0.6 + 1.5^i
-        love.graphics.rectangle('fill', 0, y, canvas:getWidth(), canvas:getHeight()-y)
-    end
-    love.graphics.setColor(1, 1, 1) ]]
-    love.graphics.line(0, groundY, canvas:getWidth(), groundY)
-
+    background:draw()
     rainDropManager:draw()
 end
 
 function love.update(dt)
     rainDropManager:update(dt)
+    background:update(dt)
 
     canvas:drawInto(canvasDraw)
 end
