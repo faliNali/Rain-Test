@@ -21,6 +21,8 @@ end
 local function canvasDraw()
     background:draw()
     rainDropManager:draw()
+
+    --love.graphics.rectangle('line', 10, 10, 25, 50)
 end
 
 function love.update(dt)
@@ -28,6 +30,10 @@ function love.update(dt)
     background:update(dt)
 
     canvas:drawInto(canvasDraw)
+end
+
+function love.keypressed(key)
+    if key == 'q' then love.event.quit() end
 end
 
 function love.draw()
