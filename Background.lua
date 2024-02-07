@@ -10,7 +10,7 @@ function Background.new(canvas, groundY)
     self.radians = 0
     self.slowerRadians = 0
 
-    self.moonX = canvas:getWidth()*0.83
+    self.moonX = canvas:getWidth()*0.5
     self.moonY = self.canvas:getHeight()*0.2
     self.numOfMoonRings = 3
 
@@ -41,7 +41,7 @@ function Background:drawMoon()
     love.graphics.circle(
         'fill', self.moonX + math.cos(r), self.moonY + math.sin(r), 20
     )
-    love.graphics.setColor(0, 0, 0)
+    love.graphics.setColor(0.3, 0.3, 0.3)
     love.graphics.circle('fill', self.moonX-5+math.sin(r), self.moonY-3+math.cos(r), 15)
 
     for i=1, self.numOfMoonRings do
@@ -53,7 +53,7 @@ function Background:drawMoon()
             35 * radiusMultiplier + math.cos(self.slowerRadians)*5,
             10 * radiusMultiplier + math.sin(self.slowerRadians)*5,
             0.4,
-            16
+            20
         )
     end
 end

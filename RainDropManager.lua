@@ -30,7 +30,7 @@ function RainDropManager:update(dt)
     self.timer:update(dt)
 
     if self.timer:isFinished() then
-        for _=1, 8 do
+        for _=1, 6 do
             self:newRainDrop()
         end
     end
