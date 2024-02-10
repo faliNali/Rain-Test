@@ -34,7 +34,7 @@ function love.load()
     local person_grid = anim8.newGrid(
         frameWidth, frameWidth, person_sprite:getWidth(), person_sprite:getHeight()
     )
-    person_anim = anim8.newAnimation(person_grid('1-4', 1), 0.4)
+    person_anim = anim8.newAnimation(person_grid('1-4', 1), 0.5)
     personPosition = {
         x = (canvas:getWidth() - frameWidth)/2,
         y = (canvas:getHeight() - frameWidth)/2 + 22
@@ -42,13 +42,12 @@ function love.load()
 end
 
 local function canvasDraw()
-    love.graphics.setColor(0.3, 0.3, 0.3)
-    love.graphics.rectangle('fill', 0, 0, canvas:getWidth(), groundY)
+    -- love.graphics.setColor(0.3, 0.3, 0.3)
+    -- love.graphics.rectangle('fill', 0, 0, canvas:getWidth(), groundY)
     background:draw()
     love.graphics.setColor(1, 1, 1)
-    person_anim:draw(person_sprite, personPosition.x, personPosition.y)
     rainDropManager:draw()
-    
+    person_anim:draw(person_sprite, personPosition.x, personPosition.y)
 end
 
 function love.update(dt)

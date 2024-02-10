@@ -13,7 +13,7 @@ function Canvas.new(scale)
 end
 
 function Canvas:drawInto(drawFunction)
-    love.graphics.setCanvas(self._canvas)
+    love.graphics.setCanvas{self._canvas, stencil=true}
     love.graphics.clear()
     drawFunction()
     love.graphics.setCanvas()

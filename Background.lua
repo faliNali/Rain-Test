@@ -37,16 +37,19 @@ function Background:drawOcean()
 end
 
 function Background:drawMoon()
+    love.graphics.setColor(1, 1, 1)
     local r = self.radians
     love.graphics.circle(
         'fill', self.moonX + math.cos(r), self.moonY + math.sin(r), 20
     )
-    love.graphics.setColor(0.3, 0.3, 0.3)
+    love.graphics.setColor(0, 0, 0)
     love.graphics.circle('fill', self.moonX-5+math.sin(r), self.moonY-3+math.cos(r), 15)
+end
 
+function Background:drawRings()
     for i=1, self.numOfMoonRings do
         love.graphics.setColor(1, 1, 1, 1-i/(self.numOfMoonRings+1))
-        local radiusMultiplier = i^0.35 + math.sin(r + i)*0.05
+        local radiusMultiplier = i^0.35 + math.sin(self.radians + i)*0.05
         drawFunctions.drawOval(
             self.moonX,
             self.moonY,
@@ -60,7 +63,28 @@ end
 
 function Background:draw()
     self:drawOcean()
+    love.graphics.stencil(function()
+        love.graphics.polygon(
+            'fill',
+            self.moonX - 50, self.moonY - 20,
+            self.moonX + 20, self.moonY - 30,
+            self.moonX + 50, self.moonY + 20
+        )
+    end, 'replace', 1)
+
+    love.graphics.setStencilTest('equal', 1)
+    self:drawRings()
+    love.graphics.setStencilTest()
     self:drawMoon()
+    love.graphics.setStencilTest('notequal', 1)
+    self:drawRings()
+    love.graphics.setStencilTest()
+    -- love.graphics.polygon(
+    --         'line',
+    --         self.moonX - 50, self.moonY - 20,
+    --         self.moonX + 20, self.moonY - 30,
+    --         self.moonX + 50, self.moonY + 20
+    --     )
 end
 
 function Background:update(dt)
