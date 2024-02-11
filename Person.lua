@@ -30,19 +30,12 @@ function Person.new(canvas)
     self.umbrellaRainTimer = Timer.new(0.5, true, true)
     self.umbrellaRainDrops = {}
 
-    self.colorMaskEffectTimer = Timer.new(0.2, true, true)
-
     return self
 end
 
 function Person:update(dt)
     self.anim:update(dt)
     self.umbrellaRainTimer:update(dt)
-    self.colorMaskEffectTimer:update(dt)
-
-    if self.colorMaskEffectTimer:isFinished() then
-        self.colorMaskEffectMultiplier = 1
-    end
 
     if self.umbrellaRainTimer:isFinished() then
         local rect = math.random() > 0.5 and self.umbrellaRects[1] or self.umbrellaRects[2]

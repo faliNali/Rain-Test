@@ -14,7 +14,27 @@ function Background.new(canvas, groundY)
     self.moonY = self.canvas:getHeight()*0.2
     self.numOfMoonRings = 3
 
+    self.skySquares = {}
+    for i=1, 40 do
+        self:newSkySquare()
+    end
+
     return self
+end
+
+function Background:newSkySquare()
+    local square = {}
+    square.width = math.random(20, 50)
+    square.x = math.random(0, self.canvas:getWidth())
+    square.y = math.random(0, self.groundY)
+
+    local angle = math.random() * math.pi*2
+    local speed = 15
+
+    square.xVelocity = math.cos(angle) * speed
+    square.yVelocity = math.sin(angle) * speed
+
+    table.insert(self.skySquares, square)
 end
 
 function Background:drawOcean()
@@ -63,6 +83,15 @@ function Background:drawRings()
 end
 
 function Background:draw()
+    love.graphics.setColor(0.5, 0.2, 1, 0.25)
+    love.graphics.rectangle('fill', 0, 0, self.canvas:getWidth(), self.groundY)
+    love.graphics.setColor(1, 1, 1, 0.08)
+    for _, square in ipairs(self.skySquares) do
+        love.graphics.rectangle('fill', square.x, square.y, square.width, square.width)
+    end
+    
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle('fill', 0, self.groundY, self.canvas:getWidth(), self.canvas:getHeight()-self.groundY)
     self:drawOcean()
     love.graphics.stencil(function()
         love.graphics.polygon(
@@ -80,12 +109,6 @@ function Background:draw()
     love.graphics.setStencilTest('notequal', 1)
     self:drawRings()
     love.graphics.setStencilTest()
-    -- love.graphics.polygon(
-    --         'line',
-    --         self.moonX - 50, self.moonY - 20,
-    --         self.moonX + 20, self.moonY - 30,
-    --         self.moonX + 50, self.moonY + 20
-    --     )
 end
 
 function Background:update(dt)
@@ -96,6 +119,16 @@ function Background:update(dt)
     self.slowerRadians = self.slowerRadians + dt/3
     if self.slowerRadians >= math.pi*2 then
         self.slowerRadians = self.slowerRadians - math.pi*2
+    end
+
+    for i, square in ipairs(self.skySquares) do
+        square.x = square.x + square.xVelocity * dt
+        square.y = square.y + square.yVelocity * dt
+
+        if square.x < -square.width then square.x = self.canvas:getWidth() end
+        if square.x > self.canvas:getWidth() then square.x = -square.width end
+        if square.y < -square.width then square.y = self.groundY end
+        if square.y > self.groundY then square.y = -square.width end
     end
 end
 

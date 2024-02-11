@@ -19,6 +19,7 @@ local groundY = 0
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.graphics.setLineStyle('rough')
+    math.randomseed(os.time())
 
     canvas = Canvas.new(4)
 

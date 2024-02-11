@@ -19,8 +19,9 @@ end
 function drawFunctions.getRandomRainColor()
     local colors = {}
     for _=1, 3 do
-        table.insert(colors, math.random(150, 255)/255)
+        table.insert(colors, math.random(255, 255)/255)
     end
+    
     return colors
 end
 
