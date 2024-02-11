@@ -1,13 +1,8 @@
+local drawFunctions = require "drawFunctions"
+
 local RainDrop = {}
 RainDrop.__index = RainDrop
-local function getRandomColor()
-    local colors = {}
-    for _=1, 3 do
-        table.insert(colors, math.random(150, 255)/255)
-    end
-    return colors
-   -- return {math.random(), math.random(), math.random()}
-end
+
 function RainDrop.new(x, y, yPopPosition)
     local self = setmetatable({}, RainDrop)
 
@@ -18,7 +13,7 @@ function RainDrop.new(x, y, yPopPosition)
     self.durationPopped = 0
     self.angle = math.pi*0.25 + (math.random()-0.5)*0.25
     self.angleVelocity = (math.random()-0.25)*0.25
-    self.color = getRandomColor()
+    self.color = drawFunctions.getRandomRainColor()
 
     return self
 end

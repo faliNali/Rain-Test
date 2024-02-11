@@ -20,17 +20,15 @@ end
 
 function RainDropManager:newRainDrop()
     local x, y = math.random(-self.canvas:getHeight(), self.canvas:getWidth()), 0
-    table.insert(
-        self.rainDrops,
-        RainDrop.new(x, y, math.random(self.groundY, self.canvas:getHeight()))
-    )
+    local rainDrop = RainDrop.new(x, y, math.random(self.groundY, self.canvas:getHeight()))
+    table.insert(self.rainDrops, rainDrop)
 end
 
 function RainDropManager:update(dt)
     self.timer:update(dt)
 
     if self.timer:isFinished() then
-        for _=1, 6 do
+        for _=1, 3 do
             self:newRainDrop()
         end
     end
@@ -43,22 +41,27 @@ function RainDropManager:update(dt)
         end
     end
 end
-
-function RainDropManager:draw()
-    
+function RainDropManager:draw(yRangeStart, yRangeEnd)
+    yRangeStart = yRangeStart or 0
+    yRangeEnd = yRangeEnd or self.canvas:getHeight()
 
     for _, rainDrop in ipairs(self.rainDrops) do
+        if rainDrop.yPopPosition < yRangeStart or rainDrop.yPopPosition > yRangeEnd then
+            goto continue
+        end
+
         local r, g, b= unpack(rainDrop.color)
         local groundYLerpPosition = (rainDrop.yPopPosition-self.groundY)/(self.canvas:getHeight()-self.groundY)
         local alpha = math.min(groundYLerpPosition + 0.3, 1)
         local sizeFactor = math.min(groundYLerpPosition + 0.5, 1)
-        
+
         local x, y = rainDrop:getPosition()
+
         if rainDrop.popped then
             local duration = rainDrop.durationPopped
             love.graphics.setColor(r, g, b, alpha * (self.durationPoppedSpan-duration))
             local ovalSizeFactor = duration^0.5 * sizeFactor * 3
-            drawFunctions.drawOval(x, y, ovalSizeFactor*2, ovalSizeFactor)
+            drawFunctions.drawOval('line', x, y, ovalSizeFactor*2, ovalSizeFactor)
         else
             love.graphics.setColor(r, g, b, alpha)
             local rainDropSizeFactor = self.rainDropSize * sizeFactor
@@ -68,6 +71,7 @@ function RainDropManager:draw()
                 y-math.sin(rainDrop.angle)*rainDropSizeFactor
             )
         end
+        ::continue::
     end
     love.graphics.setColor(1, 1, 1)
 end

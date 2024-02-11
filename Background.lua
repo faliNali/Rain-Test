@@ -51,6 +51,7 @@ function Background:drawRings()
         love.graphics.setColor(1, 1, 1, 1-i/(self.numOfMoonRings+1))
         local radiusMultiplier = i^0.35 + math.sin(self.radians + i)*0.05
         drawFunctions.drawOval(
+            'line',
             self.moonX,
             self.moonY,
             35 * radiusMultiplier + math.cos(self.slowerRadians)*5,
