@@ -30,12 +30,19 @@ function Person.new(canvas)
     self.umbrellaRainTimer = Timer.new(0.5, true, true)
     self.umbrellaRainDrops = {}
 
+    self.colorMaskEffectTimer = Timer.new(0.2, true, true)
+
     return self
 end
 
 function Person:update(dt)
     self.anim:update(dt)
     self.umbrellaRainTimer:update(dt)
+    self.colorMaskEffectTimer:update(dt)
+
+    if self.colorMaskEffectTimer:isFinished() then
+        self.colorMaskEffectMultiplier = 1
+    end
 
     if self.umbrellaRainTimer:isFinished() then
         local rect = math.random() > 0.5 and self.umbrellaRects[1] or self.umbrellaRects[2]
@@ -57,10 +64,16 @@ function Person:update(dt)
             table.remove(self.umbrellaRainDrops, i)
         end
     end
-
 end
 
 function Person:draw()
+    love.graphics.setColor(1, 1, 1, 0.6)
+    for i=1, 3 do
+        love.graphics.setColorMask(i==1, i==2, i==3, true)
+        local offset = i-2
+        self.anim:draw(self.sprite, self.position.x+offset, self.position.y+offset)
+    end
+    love.graphics.setColorMask(true, true, true, true)
     self.anim:draw(self.sprite, self.position.x, self.position.y)
 
     for _, rainDrop in ipairs(self.umbrellaRainDrops) do
