@@ -9,6 +9,11 @@ local Canvas = require 'lib.Canvas'
 local RainDropManager = require 'RainDropManager'
 local Background = require 'Background'
 local Person = require 'Person'
+local Timer  = require 'lib.Timer'
+
+local handle_sprite
+local handleOffset
+local handleTimer
 
 local canvas
 local rainDropManager
@@ -20,6 +25,10 @@ function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.graphics.setLineStyle('rough')
     math.randomseed(os.time())
+
+    handle_sprite = love.graphics.newImage('sprites/handle.png')
+    handleOffset = {x=0, y=0}
+    handleTimer = Timer.new(0.8, true, true)
 
     canvas = Canvas.new(4)
 
@@ -38,6 +47,10 @@ local function canvasDraw()
 end
 
 function love.update(dt)
+    handleTimer:update(dt)
+    if handleTimer:isFinished() then
+        handleOffset.y = handleOffset.y == 3 and 0 or 3
+    end
     rainDropManager:update(dt)
     background:update(dt)
     person:update(dt)
@@ -51,6 +64,7 @@ end
 
 function love.draw()
     canvas:draw()
+    love.graphics.draw(handle_sprite, handleOffset.x, handleOffset.y, 0, 2, 2)
 end
 
 function love.resize()
